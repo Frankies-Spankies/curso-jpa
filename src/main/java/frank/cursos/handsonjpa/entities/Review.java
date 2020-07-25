@@ -1,28 +1,34 @@
 package frank.cursos.handsonjpa.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 
-@Entity
-@Data
 @NoArgsConstructor
-public class Review {
+@Data
+@Entity
+public class Review implements Serializable {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String rating;
+    @Enumerated(EnumType.STRING)
+    private ReviewRating rating;
 
     private String description;
 
-    public Review(String rating, String description) {
+    @JsonManagedReference
+    @ManyToOne
+    private Course course;
+
+    @Builder
+    public Review(Long id, ReviewRating rating, String description, Course course) {
+        this.id = id;
         this.rating = rating;
         this.description = description;
+        this.course = course;
     }
 }

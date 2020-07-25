@@ -1,16 +1,16 @@
 package frank.cursos.handsonjpa.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = {"student"})
+@ToString(exclude = {"student"})
 @NoArgsConstructor
+@Entity // Puede que no tenga nada que ver pero hay que poner esta anotacion siempre debajo de la clase
 public class Passport {
 
     @Id
@@ -20,7 +20,12 @@ public class Passport {
     @Column(nullable = false)
     private String number;
 
+    @JsonBackReference
+    @OneToOne(fetch=FetchType.LAZY, mappedBy = "passport")
+    private Student student;
+
     public Passport(String number) {
         this.number = number;
     }
+
 }
